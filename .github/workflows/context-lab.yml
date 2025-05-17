@@ -1,0 +1,33 @@
+name: Context Lab
+
+on: [push]
+
+jobs:
+  show-contexts:
+    runs-on: ubuntu-latest
+    env:
+      CUSTOM_ENV: "This is a custom environment variable"
+    steps:
+      - name: GitHub Context
+        run: echo "${{ toJson(github) }}"
+
+      - name: Env Context
+        run: |
+          echo "CUSTOM_ENV: ${{ env.CUSTOM_ENV }}"
+          echo "GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}"
+      
+      - name: Job Context
+        run: echo "${{ toJson(job) }}"
+
+      - name: Steps Context
+        id: example_step
+        run: echo "This is an example step"
+      
+      - name: Access Previous Step
+        run: echo "Step 'example_step' status: ${{ steps.example_step.outcome }}"
+
+      - name: Runner Context
+        run: echo "${{ toJson(runner) }}"
+
+      - name: Secrets Context
+        run: echo "Secret variable set: ${{ secrets.DEMO_SECRET || 'No secret set' }}"
